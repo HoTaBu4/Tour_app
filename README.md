@@ -2,8 +2,12 @@
 
 A simple **Tour Management** application built with **Node.js**, **Express**, and **MongoDB**.  
 This app allows you to **create, read, update, and delete (CRUD)** tours.
-
 ---
+
+
+# Script
+- npm run import:tours - to import all tours from `tours-simple.json`
+- npm run delte:tours - to delete all tours from DB
 
 ## Table of Contents
 
