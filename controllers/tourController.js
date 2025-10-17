@@ -13,18 +13,43 @@ export const checkForDataTour = (req, res, next) => {
 
 export const getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // 1️ Make a shallow copy of query params
+    const queryParams = { ...req.query };
+
+    // 2️ Remove non-filtering fields
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(field => delete queryParams[field]);
+
+    // 3️ Build a MongoDB-compatible filter object
+    const filters = {};
+
+    for (const [key, value] of Object.entries(queryParams)) {
+      const match = key.match(/^(\w+)\[(gte|gt|lte|lt)\]$/);
+
+      if (match) {
+        const [, field, operator] = match;
+        if (!filters[field]) filters[field] = {};
+        filters[field][`$${operator}`] = isNaN(value) ? value : Number(value);
+      } else {
+        filters[key] = isNaN(value) ? value : Number(value);
+      }
+    }
+
+    console.log('🔍 MongoDB Query:', filters);
+
+    const tours = await Tour.find(filters);
 
     res.status(200).json({
-      status: "success",
-      result: tours.length,
-      data: {
-        tours
-      }
-    })
-    
+      status: 'success',
+      results: tours.length,
+      data: { tours },
+    });
+
   } catch (error) {
-    
+    res.status(400).json({
+      status: 'fail',
+      message: error.message,
+    });
   }
 };
 
