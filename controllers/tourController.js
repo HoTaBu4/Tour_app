@@ -13,14 +13,13 @@ export const checkForDataTour = (req, res, next) => {
 
 export const getAllTours = async (req, res) => {
   try {
-    // 1️ Make a shallow copy of query params
     const queryParams = { ...req.query };
 
-    // 2️ Remove non-filtering fields
+    // 1 Remove fields that are not used for filtering (API features)
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(field => delete queryParams[field]);
 
-    // 3️ Build a MongoDB-compatible filter object
+    // 2 Convert query parameters into a Mongoose-compatible filter object
     const filters = {};
 
     for (const [key, value] of Object.entries(queryParams)) {
@@ -28,16 +27,35 @@ export const getAllTours = async (req, res) => {
 
       if (match) {
         const [, field, operator] = match;
-        if (!filters[field]) filters[field] = {};
+
+        // Initialize the field if it doesn’t exist yet
+        if (!filters[field]) {
+          filters[field] = {};
+        }
+
+        // Add MongoDB operator (e.g. $lte, $gte)
+        // Convert numeric strings ("5") to numbers (5)
         filters[field][`$${operator}`] = isNaN(value) ? value : Number(value);
       } else {
+        // Otherwise, treat it as a normal field (no operator)
         filters[key] = isNaN(value) ? value : Number(value);
       }
     }
 
-    console.log('🔍 MongoDB Query:', filters);
+    // 3 Start building the query
+    let query = Tour.find(filters);
 
-    const tours = await Tour.find(filters);
+    // 4 Sorting feature
+    if (req.query.sort) {
+      // Example: ?sort=price,duration → "price duration"
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      // Default sort by creation date (descending)
+      query = query.sort('-createdAt');
+    }
+
+    const tours = await query;
 
     res.status(200).json({
       status: 'success',
@@ -52,6 +70,7 @@ export const getAllTours = async (req, res) => {
     });
   }
 };
+
 
 export const createTour = async (req, res) => {
  try {
