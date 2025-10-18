@@ -1,16 +1,5 @@
 import Tour from '../models/tourModel.js';
 
-export const checkForDataTour = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    res.status(400).json({
-      status: "fail",
-      message: "Missing tour name or price"
-    });
-  } else {
-    next();
-  }
-};
-
 export const getAllTours = async (req, res) => {
   try {
     const queryParams = { ...req.query };
