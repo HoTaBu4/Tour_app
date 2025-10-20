@@ -1,7 +1,10 @@
 import express from 'express';
-import { getAllTours, createTour, getTour, deleteTour, updateTour } from '../controllers/tourController.js';
+import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats} from '../controllers/tourController.js';
 
 const router = express.Router()
+
+router.route('/tour-stats')
+  .get(getTourStats)
 
 router.route("/")
   .get(getAllTours)
