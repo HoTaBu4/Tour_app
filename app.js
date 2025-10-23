@@ -3,6 +3,7 @@ import morgan from "morgan";
 
 import toursRouter from "./routes/toursRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
+import AppError from "./utils/AppError.js";
 
 const app = express();
 
@@ -14,10 +15,8 @@ app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
 
 app.use((req, res, next) => {
-  const err = new Error(`Can't find ${req.originalUrl} on this server!`);
-  err.statusCode = 404;
-  err.status = 'fail';
-  next(err);
+
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 app.use((err, req, res, next) => {
