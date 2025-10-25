@@ -1,5 +1,6 @@
 import Tour from '../models/tourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
+import AppError from '../utils/AppError.js';
 import CatchAsync from '../utils/catchAsync.js';
 
 export const getAllTours = CatchAsync(async (req, res,next) => {
@@ -33,12 +34,22 @@ export const createTour = CatchAsync(async (req, res, next) => {
 
 export const getTour = CatchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
+
+  if (!tour) {
+      return next(new AppError('Failed to get tour with that ID', 404));
+   }
+
   // Tour.findOne({ _id: req.params.id });
   res.status(200).json({ status: "success", data: { tour } });
 });
 
 export const deleteTour = CatchAsync(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
+  const tour = await Tour.findByIdAndDelete(req.params.id);
+
+  if (!tour) {
+    return next(new AppError('Failed to delete tour with that ID', 404));
+  }
+
   res.status(204).json({
     status: 'success',
     data: null
