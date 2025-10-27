@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./config.env" });
 
-proccess.on('uncaughtException', err => {
+process.on('uncaughtException', err => {
   console.log(err.name, err.message);
   console.log('UNCAUGHT EXCEPTION! Shutting down...');
 });
@@ -14,9 +14,9 @@ const DB = process.env.DATABASE.replace(
   process.env.DB_PASSWORD
 );
 
-mongoose.connect(DB)
+mongoose.connect(DB);
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
 
@@ -27,4 +27,3 @@ process.on('unhandledRejection', err => {
     process.exit(1);
   });
 });
-
