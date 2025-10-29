@@ -31,7 +31,7 @@ export const login = CatchAsync(async (req, res, next) => {
         return next(new Error('Please provide email and password!'));
     }
     // 2) Check if user exists && password is correct
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).select('+password')
 
     let token = ''
     res.status(200).json({
