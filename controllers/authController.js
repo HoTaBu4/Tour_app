@@ -33,6 +33,10 @@ export const login = CatchAsync(async (req, res, next) => {
     // 2) Check if user exists && password is correct
     const user = await User.findOne({ email }).select('+password')
 
+    if (!correct || await user.correctPassword(password, user.password)) {
+        return next(new Error('Incorrect email or password'),401);
+    }
+
     let token = ''
     res.status(200).json({
         status: 'success',
