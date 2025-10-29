@@ -1,6 +1,13 @@
 import User from "../models/userModel.js";
 import CatchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
+import { promisify } from "util";
+
+const signToken = id => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+}
 
 export const signup = CatchAsync(async (req, res) => {
     const newUser = await User.create({
@@ -10,9 +17,7 @@ export const signup = CatchAsync(async (req, res) => {
         passwordConfirm: req.body.passwordConfirm
     });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    });
+    const token = signToken(newUser._id);
 
     res.status(201).json({
         status: 'success',
@@ -33,7 +38,7 @@ export const login = CatchAsync(async (req, res, next) => {
     // 2) Check if user exists && password is correct
     const user = await User.findOne({ email }).select('+password')
 
-    if (!correct || await user.correctPassword(password, user.password)) {
+    if (!user || await user.correctPassword(password, user.password)) {
         return next(new Error('Incorrect email or password'),401);
     }
 
@@ -42,4 +47,21 @@ export const login = CatchAsync(async (req, res, next) => {
         status: 'success',
         token
     });
+});
+
+export const protect = CatchAsync(async (req, res, next) => {
+    // 1) Getting token and check of it's there
+    let token;
+    if (req.body.authorization && req.body.authorization.startsWith('Bearer')) {
+        token = req.body.authorization.split(' ')[1];
+    }
+    
+    if (!token) {
+        return next(new Error('You are not logged in! Please log in to get access.', 401));
+    }
+    // 2) Verification token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // 3) Check if user still exists
+    next();
 });
