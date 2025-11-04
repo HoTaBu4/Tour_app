@@ -42,7 +42,7 @@ export const login = CatchAsync(async (req, res, next) => {
         return next(new Error('Incorrect email or password'),401);
     }
 
-    let token = ''
+    let token = signToken(user._id);
     res.status(200).json({
         status: 'success',
         token
@@ -52,8 +52,8 @@ export const login = CatchAsync(async (req, res, next) => {
 export const protect = CatchAsync(async (req, res, next) => {
     // 1) Getting token and check of it's there
     let token;
-    if (req.body.authorization && req.body.authorization.startsWith('Bearer')) {
-        token = req.body.authorization.split(' ')[1];
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
     }
     
     if (!token) {
