@@ -4,6 +4,7 @@ import CatchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import sendEmail from "../utils/emails.js";
+import crypto from "crypto";
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
