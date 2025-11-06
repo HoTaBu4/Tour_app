@@ -11,8 +11,8 @@ router.route("/login")
 
 router.route("/forgotPassword")
   .post(forgotPassword);
-router.route("/resetPassword")
-  .post(resetPassword);
+router.route("/resetPassword/:token")
+  .patch(resetPassword);
 
 router.route("/")
   .get(getAllUsers)
