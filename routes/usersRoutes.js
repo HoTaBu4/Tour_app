@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllUsers, createUser, getUser, deleteUser } from '../controllers/userController.js';
-import { forgotPassword, login, resetPassword, signup } from '../controllers/authController.js';
+import { forgotPassword, login, protect, resetPassword, signup, updatePassword } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -13,6 +13,9 @@ router.route("/forgotPassword")
   .post(forgotPassword);
 router.route("/resetPassword/:token")
   .patch(resetPassword);
+
+router.route("/updateMyPassword")
+  .patch(protect, updatePassword);
 
 router.route("/")
   .get(getAllUsers)
