@@ -10,14 +10,12 @@ import helmet from "helmet";
 
 const app = express();
 
+//set security HTTP headers
+app.use(helmet());
+
 if (process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'));
 }
-
-app.use(express.json());
-
-//set security HTTP headers
-app.use(helmet());
 
 //limiting requests from same API
 const limiter = rateLimit({
@@ -25,6 +23,11 @@ const limiter = rateLimit({
   windowMs:60 * 60 * 1000,
   message:'Too many requests from this IP, please try again in an hour!'
 })
+
+//body parser, reading data from body into req.body
+app.use(express.json({
+  limit:'10kb'
+}));
 
 app.use('/api', limiter);
 
