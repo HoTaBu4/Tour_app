@@ -6,12 +6,20 @@ import usersRouter from "./routes/usersRoutes.js";
 import AppError from "./utils/AppError.js";
 import errorController from "./controllers/errorController.js";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 
 const app = express();
 
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 
+//set security HTTP headers
+app.use(helmet());
+
+//limiting requests from same API
 const limiter = rateLimit({
   max:100,
   windowMs:60 * 60 * 1000,
