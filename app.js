@@ -6,7 +6,8 @@ import usersRouter from "./routes/usersRoutes.js";
 import AppError from "./utils/AppError.js";
 import errorController from "./controllers/errorController.js";
 import rateLimit from "express-rate-limit";
-import helmet from "helmet";
+import helmet, { xssFilter } from "helmet";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 
 const app = express();
 
@@ -28,6 +29,12 @@ const limiter = rateLimit({
 app.use(express.json({
   limit:'10kb'
 }));
+
+//sanitize data against NoSQL query injection
+app.use(ExpressMongoSanitize());
+
+//sanitize data against XSS
+app.use(xssFilter());
 
 app.use('/api', limiter);
 
