@@ -8,6 +8,7 @@ import errorController from "./controllers/errorController.js";
 import rateLimit from "express-rate-limit";
 import helmet, { xssFilter } from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp";
 
 const app = express();
 
