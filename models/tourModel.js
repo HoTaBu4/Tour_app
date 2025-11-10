@@ -99,6 +99,12 @@ const tourSchema = new mongoose.Schema({
         description: String,
         day: Number
       }
+    ],
+    gaides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
     ]
   },
   {
