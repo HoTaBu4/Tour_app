@@ -36,6 +36,20 @@ app.use(ExpressMongoSanitize());
 //sanitize data against XSS
 app.use(xssFilter());
 
+//prevent parameter pollution
+app.use(hpp(
+  {
+    whitelist:[
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price'
+    ]
+  }
+))
+
 app.use('/api', limiter);
 
 app.use('/api/v1/tours', toursRouter);
