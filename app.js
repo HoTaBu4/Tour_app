@@ -3,6 +3,7 @@ import morgan from "morgan";
 
 import toursRouter from "./routes/toursRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
+import reviewsRouter from "./routes/reviewsRoutes.js";
 import AppError from "./utils/AppError.js";
 import errorController from "./controllers/errorController.js";
 import rateLimit from "express-rate-limit";
@@ -63,6 +64,7 @@ app.use('/api', limiter);
 
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/reviews', reviewsRouter);
 
 app.use((req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
