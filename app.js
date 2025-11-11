@@ -31,8 +31,16 @@ app.use(express.json({
   limit:'10kb'
 }));
 
-//sanitize data against NoSQL query injection
-app.use(ExpressMongoSanitize());
+//sanitize data against NoSQL query injection without reassigning req.query
+const sanitizeRequest = (req, res, next) => {
+  ['body', 'params', 'headers', 'query'].forEach((key) => {
+    if (req[key]) {
+      ExpressMongoSanitize.sanitize(req[key]);
+    }
+  });
+  next();
+};
+app.use(sanitizeRequest);
 
 //sanitize data against XSS
 app.use(xssFilter());
