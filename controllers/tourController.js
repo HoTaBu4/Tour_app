@@ -33,7 +33,7 @@ export const createTour = CatchAsync(async (req, res, next) => {
 
 
 export const getTour = CatchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate('reviews');
 
   if (!tour) {
       return next(new AppError('Failed to get tour with that ID', 404));
