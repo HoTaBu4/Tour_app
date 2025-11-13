@@ -2,6 +2,7 @@ import Tour from '../models/tourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import AppError from '../utils/AppError.js';
 import CatchAsync from '../utils/catchAsync.js';
+import { deleteOne } from './handleFactory.js';
 
 export const getAllTours = CatchAsync(async (req, res,next) => {
   // Execute query
@@ -43,18 +44,7 @@ export const getTour = CatchAsync(async (req, res, next) => {
   res.status(200).json({ status: "success", data: { tour } });
 });
 
-export const deleteTour = CatchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndDelete(req.params.id);
-
-  if (!tour) {
-    return next(new AppError('Failed to delete tour with that ID', 404));
-  }
-
-  res.status(204).json({
-    status: 'success',
-    data: null
-  });
-});
+export const deleteTour = deleteOne(Tour)
 
 export const updateTour = CatchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {

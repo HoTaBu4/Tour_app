@@ -1,5 +1,6 @@
 import Review from "../models/reviewModel.js";
 import CatchAsync from "../utils/catchAsync.js";
+import { deleteOne } from "./handleFactory.js";
 
 export const getAllReviews = CatchAsync(async (req, res) => {
     let filter = {}
@@ -52,15 +53,4 @@ export const getReviewById = CatchAsync(async (req, res, next) => {
     });
 })
 
-export const deleteReview = CatchAsync(async (req, res, next) => {
-    const review = await Review.findByIdAndDelete(req.params.id);
-
-    if (!review) {
-        return next(new AppError('No review found with that ID', 404));
-    }
-
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
-})
+export const deleteReview = deleteOne(Review);
