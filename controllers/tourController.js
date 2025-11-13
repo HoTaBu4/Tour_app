@@ -2,7 +2,7 @@ import Tour from '../models/tourModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import AppError from '../utils/AppError.js';
 import CatchAsync from '../utils/catchAsync.js';
-import { deleteOne } from './handleFactory.js';
+import handleFactory from './handleFactory.js';
 
 export const getAllTours = CatchAsync(async (req, res,next) => {
   // Execute query
@@ -22,16 +22,7 @@ export const getAllTours = CatchAsync(async (req, res,next) => {
   });
 });
 
-export const createTour = CatchAsync(async (req, res, next) => {
-   const newTour = await Tour.create(req.body);
-   res.status(201).json({
-     status: "success",
-     data: {
-       tour: newTour
-     }
-   });
-});
-
+export const createTour = handleFactory.createOne(Tour)
 
 export const getTour = CatchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id).populate('reviews');
@@ -44,20 +35,9 @@ export const getTour = CatchAsync(async (req, res, next) => {
   res.status(200).json({ status: "success", data: { tour } });
 });
 
-export const deleteTour = deleteOne(Tour)
+export const deleteTour = handleFactory.deleteOne(Tour)
+export const updateTour = handleFactory.updateOne(Tour);
 
-export const updateTour = CatchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-    res.status(200).json({
-      status: 'success',
-      data: {
-        tour
-      }
-    });
-});
 
 export const getTourStats = CatchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([

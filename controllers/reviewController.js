@@ -1,6 +1,6 @@
 import Review from "../models/reviewModel.js";
 import CatchAsync from "../utils/catchAsync.js";
-import { deleteOne } from "./handleFactory.js";
+import handleFactory from "./handleFactory.js";
 
 export const getAllReviews = CatchAsync(async (req, res) => {
     let filter = {}
@@ -19,8 +19,7 @@ export const getAllReviews = CatchAsync(async (req, res) => {
     });
 });
 
-export const createReview = CatchAsync(async (req, res) => {
-    //alow nested routes
+export const setTourUserIds = (req, res, next) => {
     if (!req.body.tour) {
         req.body.tour = req.params.tourId
     }
@@ -29,14 +28,10 @@ export const createReview = CatchAsync(async (req, res) => {
         req.body.user = req.user.id
     }
 
-    const newReview = await Review.create(req.body);
-    res.status(201).json({
-        status: 'success',
-        data: {
-            review: newReview
-        }
-    });
-});
+    next()
+}
+
+export const createReview = handleFactory.createOne(Review)
 
 export const getReviewById = CatchAsync(async (req, res, next) => {
     const review = await Review.findByid(req.params.id);
@@ -53,4 +48,5 @@ export const getReviewById = CatchAsync(async (req, res, next) => {
     });
 })
 
-export const deleteReview = deleteOne(Review);
+export const updateReview = handleFactory.updateOne(Review);
+export const deleteReview = handleFactory.deleteOne(Review);
