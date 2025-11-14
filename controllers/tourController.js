@@ -1,40 +1,10 @@
 import Tour from '../models/tourModel.js';
-import APIFeatures from '../utils/apiFeatures.js';
-import AppError from '../utils/AppError.js';
 import CatchAsync from '../utils/catchAsync.js';
 import handleFactory from './handleFactory.js';
 
-export const getAllTours = CatchAsync(async (req, res,next) => {
-  // Execute query
-  const Feature = new APIFeatures(Tour.find(),req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-    console.log('finl')
-
-  const tours = await Feature.query;
-
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: { tours },
-  });
-});
-
+export const getAllTours = handleFactory.getAll(Tour);
 export const createTour = handleFactory.createOne(Tour)
-
-export const getTour = CatchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-
-  if (!tour) {
-      return next(new AppError('Failed to get tour with that ID', 404));
-   }
-
-  // Tour.findOne({ _id: req.params.id });
-  res.status(200).json({ status: "success", data: { tour } });
-});
-
+export const getTour = handleFactory.getOne(Tour, {path: 'reviews'})
 export const deleteTour = handleFactory.deleteOne(Tour)
 export const updateTour = handleFactory.updateOne(Tour);
 

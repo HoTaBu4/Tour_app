@@ -12,15 +12,6 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 }
 
-export const getAllUsers = CatchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: { users },
-  });
-});
 
 export const updateMe = CatchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
@@ -35,13 +26,13 @@ export const updateMe = CatchAsync(async (req, res, next) => {
   
   //2) Filtered out unwanted fields names that are not allowed to be updated
   const filterbody = filterObj(req.body, 'name', 'email');
-
+  
   //3) update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filterbody, {
     new: true,
     runValidators: true
   });
-
+  
   res.status(200).json({
     status: "success",
     data: {
@@ -52,7 +43,7 @@ export const updateMe = CatchAsync(async (req, res, next) => {
 
 export const deleteMe = CatchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
-
+  
   res.status(204).json({
     status: "success",
     data: null
@@ -66,13 +57,9 @@ export const createUser = (req, res) => {
   });
 }
 
-//do not update passwords
-export const updateUser = handleFactory.updateOne(User);
+export const getAllUsers = handleFactory.getAll(User);
 export const deleteUser = handleFactory.deleteOne(User);
 
-export const getUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "This route is not yet defined!"
-  });
-}
+//do not update passwords
+export const updateUser = handleFactory.updateOne(User);
+export const getUser = handleFactory.getOne(User)
