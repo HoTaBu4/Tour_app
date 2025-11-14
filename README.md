@@ -6,8 +6,9 @@ This app allows you to **create, read, update, and delete (CRUD)** tours.
 
 
 # Script
-- npm run import:tours - to import all tours from `tours-simple.json`
-- npm run delte:tours - to delete all tours from DB
+comment all the validation before importing
+- npm run import:all - to import all tours from `tours-simple.json`
+- npm run delte:all - to delete all tours from DB
 
 ## Table of Contents
 

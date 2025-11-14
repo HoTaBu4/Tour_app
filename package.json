@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "start:prod": "ENVIROMENT=production nodemon server.js",
-    "import:tours": "node dev-data/data/import-dev-data.js --import",
-    "delete:tours": "node dev-data/data/import-dev-data.js --delete",
+    "import:all": "node dev-data/data/import-dev-data.js --import",
+    "delete:all": "node dev-data/data/import-dev-data.js --delete",
     "debug": "ndb server.js"
   },
   "author": "",

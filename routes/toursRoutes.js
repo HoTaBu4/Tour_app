@@ -10,11 +10,19 @@ router.route('/tour-stats')
   .get(getTourStats)
 
 router.route('/monthly-plan/:year')
-  .get(getMonthlyPlan)
+  .get(
+    protect,
+    restrictTo('admin', 'lead-guide','guide'),
+    getMonthlyPlan
+  )
 
 router.route("/")
-  .get( protect, getAllTours )
-  .post( createTour);
+  .get(getAllTours )
+  .post( 
+    protect,
+    restrictTo('admin', 'lead-guide'),
+    createTour
+  );
 
 router.route("/:id")
   .get(getTour)
@@ -23,6 +31,10 @@ router.route("/:id")
     restrictTo('admin'),
     deleteTour
   )
-  .patch(updateTour);
+  .patch(
+    protect,
+    restrictTo('admin', 'lead-guide'),
+    updateTour
+  );
 
 export default router;

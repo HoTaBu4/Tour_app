@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import Tour from "../../models/tourModel.js";
 import { fileURLToPath } from "url";
 import path from "path";
+import User from "../../models/userModel.js";
+import Review from "../../models/reviewModel.js";
 
 dotenv.config({ path: "./config.env" });
 
@@ -19,11 +21,15 @@ mongoose.connect(DB)
 
 // READ JSON FILE
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`));
+const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`));
+const reviews = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`));
 // IMPORT DATA INTO DB
 
 const importData = async () => {
     try {
         await Tour.create(tours);
+        await Review.create(reviews);
+        await User.create(users);
         console.log('Data successfully loaded!');
 
     } catch (err) {
@@ -35,6 +41,8 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         await Tour.deleteMany();
+        await User.deleteMany();
+        await Review.deleteMany();
         console.log('Data successfully deleted!');
 
     } catch (err) {
