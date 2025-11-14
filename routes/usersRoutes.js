@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, createUser, getUser, deleteUser, updateMe, deleteMe } from '../controllers/userController.js';
+import { getAllUsers, createUser, getUser, deleteUser, updateMe, deleteMe, getMe } from '../controllers/userController.js';
 import { forgotPassword, login, protect, resetPassword, signup, updatePassword } from '../controllers/authController.js';
 
 const router = express.Router();
@@ -18,6 +18,9 @@ router.route("/updateMe")
   .patch(protect, updateMe);
 router.route("/deleteMe")
   .delete(protect, deleteMe);
+
+router.route('/me')
+  .get(protect, getMe, getUser);
 
 router.route("/updateMyPassword")
   .patch(protect, updatePassword);

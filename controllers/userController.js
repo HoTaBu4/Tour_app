@@ -50,6 +50,11 @@ export const deleteMe = CatchAsync(async (req, res, next) => {
   });
 });
 
+export const getMe = (req, res ,next) => {
+  req.params.id = req.user.id;
+  next();
+}
+
 export const createUser = (req, res) => {
   res.status(500).json({
     status: "error",
