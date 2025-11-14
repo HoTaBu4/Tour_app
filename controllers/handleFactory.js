@@ -77,12 +77,12 @@ export const getAll = Model => CatchAsync(async (req, res,next) => {
     .paginate();
     console.log('finl')
 
-  const tours = await Feature.query;
+  const doc = await Feature.query;
 
   res.status(200).json({
     status: 'success',
-    results: tours.length,
-    data: { tours },
+    results: doc.length,
+    data: { doc },
   });
 });
 
