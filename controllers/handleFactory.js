@@ -44,13 +44,13 @@ const createOne = Model => CatchAsync(async (req, res, next) => {
 });
 
 const getOne = (Model, popOption) => CatchAsync(async(req, res, next) => {
-  let query = await Model.findById(req.params.id)
+  let query = Model.findById(req.params.id)
 
   if (popOption) {
-    query = query.populate('reviews');
+    query = query.populate(popOption);
   }
 
-  const doc = await query
+  const doc = await query;
 
   if (!doc) {
       return next(new AppError('Failed to get document with that ID', 404));
