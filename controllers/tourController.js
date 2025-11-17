@@ -98,8 +98,9 @@ export const getToursWithin = CatchAsync(async(req, res, next) => {
 
   const RADIUS_OF_EARTH_MILES = 3963.2
   const RADIUS_OF_EARTH_KILOMETS = 6378.1
+  const MILES = 'mi'
 
-  const radius = unit === 'miles' ? distance / RADIUS_OF_EARTH_MILES : distance / RADIUS_OF_EARTH_KILOMETS
+  const radius = unit === MILES ? distance / RADIUS_OF_EARTH_MILES : distance / RADIUS_OF_EARTH_KILOMETS
 
   if (!lat || !lng) {
     next(new AppError('please provide lantitude and longtitudein the format lat, lng', 400))
@@ -117,6 +118,48 @@ export const getToursWithin = CatchAsync(async(req, res, next) => {
     result: tours.length,
     data: {
       data: tours
+    }
+  })
+})
+
+export const getDistances = CatchAsync(async(req, res, next) => {
+  const { latlng, unit} = req.params;
+  const [lat, lng] = latlng.split(',')
+
+  const MILES = 'mi'
+  const MILSE_TO_METERS = 0.000621371
+  const MULTIPLIER_METER_KILOMETR = 0.001
+
+  const multiplier = unit === MILES ? MILSE_TO_METERS: MULTIPLIER_METER_KILOMETR
+
+
+  if (!lat || !lng) {
+    next(new AppError('please provide lantitude and longtitudein the format lat, lng', 400))
+  }
+
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1]
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier
+      }
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1
+      }
+    }
+  ])
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: distances
     }
   })
 })
