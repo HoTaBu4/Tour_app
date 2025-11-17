@@ -1,4 +1,5 @@
 import Tour from '../models/tourModel.js';
+import AppError from '../utils/AppError.js';
 import CatchAsync from '../utils/catchAsync.js';
 import handleFactory from './handleFactory.js';
 
@@ -88,3 +89,34 @@ export const getMonthlyPlan = CatchAsync(async (req, res, next) => {
     }
   });
 });
+
+'/tours-within/:distance/center/:latlng/unit/:unit'
+'/tours-within/230/center/52.245395,20.940501/unit/mi'
+export const getToursWithin = CatchAsync(async(req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',')
+
+  const RADIUS_OF_EARTH_MILES = 3963.2
+  const RADIUS_OF_EARTH_KILOMETS = 6378.1
+
+  const radius = unit === 'miles' ? distance / RADIUS_OF_EARTH_MILES : distance / RADIUS_OF_EARTH_KILOMETS
+
+  if (!lat || !lng) {
+    next(new AppError('please provide lantitude and longtitudein the format lat, lng', 400))
+  }
+
+  console.log(distance, latlng, unit)
+  const tours = await Tour.find({ startLocation: {
+    $geoWithin: {
+      $centerSphere: [[lng,lat], radius]
+    }
+  }})
+
+  res.status(200).json({
+    status: 'success',
+    result: tours.length,
+    data: {
+      data: tours
+    }
+  })
+})

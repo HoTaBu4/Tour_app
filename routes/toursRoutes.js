@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats, getMonthlyPlan} from '../controllers/tourController.js';
+import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats, getMonthlyPlan, getToursWithin} from '../controllers/tourController.js';
 import { protect,restrictTo } from '../controllers/authController.js';
 import reviewsRouter from '../routes/reviewsRoutes.js'
 const router = express.Router()
@@ -15,6 +15,9 @@ router.route('/monthly-plan/:year')
     restrictTo('admin', 'lead-guide','guide'),
     getMonthlyPlan
   )
+
+router.route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(getToursWithin)
 
 router.route("/")
   .get(getAllTours )
