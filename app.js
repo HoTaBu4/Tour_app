@@ -10,8 +10,19 @@ import rateLimit from "express-rate-limit";
 import helmet, { xssFilter } from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
+import path from 'path';
+import { fileURLToPath } from "url";
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); 
+
+app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'views'))
+
+//serving static files
+app.use(express.static(path.join(__dirname,'public')))
 
 //set security HTTP headers
 app.use(helmet());
@@ -61,6 +72,11 @@ app.use(hpp(
 ))
 
 app.use('/api', limiter);
+
+//routes
+app.get('/', (req, res ) => {
+  res.status(200).render('base')
+})
 
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
