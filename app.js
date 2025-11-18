@@ -3,6 +3,7 @@ import morgan from "morgan";
 
 import toursRouter from "./routes/toursRoutes.js";
 import usersRouter from "./routes/usersRoutes.js";
+import viewRouter from "./routes/viewRoutes.js";
 import reviewsRouter from "./routes/reviewsRoutes.js";
 import AppError from "./utils/AppError.js";
 import errorController from "./controllers/errorController.js";
@@ -74,10 +75,7 @@ app.use(hpp(
 app.use('/api', limiter);
 
 //routes
-app.get('/', (req, res ) => {
-  res.status(200).render('base')
-})
-
+app.use('/',viewRouter)
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/reviews', reviewsRouter);
