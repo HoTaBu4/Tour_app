@@ -1,8 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config({ path: "./config.env" });
+
 import mongoose from "mongoose";
 import app from "./app.js";
-import dotenv from "dotenv";
-
-dotenv.config({ path: "./config.env" });
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);

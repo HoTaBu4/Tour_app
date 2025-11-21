@@ -24,7 +24,8 @@ const getTour = CatchAsync(async (req, res, next) => {
 
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
-    tour
+    tour,
+    mapToken: process.env.MAP_TOKEN
   });
 })
 export default { getOverview, getTour }

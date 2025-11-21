@@ -26,7 +26,13 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname,'public')))
 
 //set security HTTP headers
-app.use(helmet());
+// keep Helmet protections but disable CSP so third-party scripts like Mapbox can load
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+  })
+);
 
 if (process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'));
