@@ -13,6 +13,7 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import path from 'path';
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -49,6 +50,7 @@ const limiter = rateLimit({
 app.use(express.json({
   limit:'10kb'
 }));
+app.use(cookieParser())
 
 //sanitize data against NoSQL query injection without reassigning req.query
 const sanitizeRequest = (req, res, next) => {
