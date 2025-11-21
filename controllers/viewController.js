@@ -28,4 +28,10 @@ const getTour = CatchAsync(async (req, res, next) => {
     mapToken: process.env.MAP_TOKEN
   });
 })
-export default { getOverview, getTour }
+
+const getloginForm = (req, res) => {
+  res.status(200).render('login', {
+    title: 'log into your account'
+  })
+}
+export default { getOverview, getTour , getloginForm}
