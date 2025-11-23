@@ -75,7 +75,6 @@ export const getAll = Model => CatchAsync(async (req, res,next) => {
     .sort()
     .limitFields()
     .paginate();
-    console.log('finl')
 
   const doc = await Feature.query;
 

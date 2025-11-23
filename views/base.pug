@@ -11,8 +11,8 @@ html
         href='https://fonts.googleapis.com/css?family=Lato:300,300i,700'
         rel='stylesheet'
       )
-      script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js' defer)
-      script(src='/js/login.js' defer)
+      //- script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js' defer)
+      //- script(src='/js/login.js' defer)
 
   body
     // Header
@@ -23,3 +23,6 @@ html
 
     //Footer
     include _footer
+
+    block scripts
+      script(src='/js/bundle.js' defer)
