@@ -1,10 +1,10 @@
 import express from 'express'
 import viewController from '../controllers/viewController.js';
-import { isLoggedIn } from '../controllers/authController.js';
+import * as authController from '../controllers/authController.js';
 
 const router = express.Router();
 
-router.use(isLoggedIn)
+router.use(authController.isLoggedIn)
 
 router.get('/', viewController.getOverview)
 router.get('/tour/:slug', viewController.getTour)

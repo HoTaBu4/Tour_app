@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats, getMonthlyPlan, getToursWithin, getDistances} from '../controllers/tourController.js';
-import { protect,restrictTo } from '../controllers/authController.js';
+import * as authController from '../controllers/authController.js';
 import reviewsRouter from '../routes/reviewsRoutes.js'
 const router = express.Router()
 
@@ -11,8 +11,8 @@ router.route('/tour-stats')
 
 router.route('/monthly-plan/:year')
   .get(
-    protect,
-    restrictTo('admin', 'lead-guide','guide'),
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide','guide'),
     getMonthlyPlan
   )
 
@@ -20,26 +20,26 @@ router.route('/tours-within/:distance/center/:latlng/unit/:unit')
   .get(getToursWithin)
 
 router.route('/distances/:latlng/unit/:unit')
-  .get(getDistances)
+  .get(authController.protect, getDistances)
 
 router.route("/")
   .get(getAllTours )
   .post( 
-    protect,
-    restrictTo('admin', 'lead-guide'),
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
     createTour
   );
 
 router.route("/:id")
   .get(getTour)
   .delete(
-    protect,
-    restrictTo('admin'),
+    authController.protect,
+    authController.restrictTo('admin'),
     deleteTour
   )
   .patch(
-    protect,
-    restrictTo('admin', 'lead-guide'),
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
     updateTour
   );
 

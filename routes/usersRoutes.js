@@ -1,27 +1,29 @@
 import express from 'express';
 import { getAllUsers, createUser, getUser, deleteUser, updateMe, deleteMe, getMe } from '../controllers/userController.js';
-import { forgotPassword, login, protect, resetPassword, restrictTo, signup, updatePassword } from '../controllers/authController.js';
+import * as authController from '../controllers/authController.js';
 
 const router = express.Router();
 
 router.route("/signup")
-  .post(signup);
+  .post(authController.signup);
 router.route("/login")
-  .post(login);
+  .post(authController.login);
+router.route("/logout")
+  .get(authController.logout);
 
 router.route("/forgotPassword")
-  .post(forgotPassword);
+  .post(authController.forgotPassword);
 router.route("/resetPassword/:token")
-  .patch(resetPassword);
+  .patch(authController.resetPassword);
   
 //protect all routes after this middleware
-router.use(protect);
+router.use(authController.protect);
   
 router.route('/me')
   .get(getMe, getUser);
 
 router.route("/updateMyPassword")
-  .patch(updatePassword);
+  .patch(authController.updatePassword);
 
 router.route("/updateMe")
   .patch(updateMe);
@@ -29,7 +31,7 @@ router.route("/deleteMe")
   .delete(deleteMe);
 
 //restrict all routes after this middleware
-router.use(restrictTo('admin'))
+router.use(authController.restrictTo('admin'))
 
 router.route("/")
   .get(getAllUsers)
