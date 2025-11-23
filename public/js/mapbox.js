@@ -1,15 +1,15 @@
-export const displayMap = (locations = [], accessToken) => {
-  if ( !accessToken) return;
+export const displayMap = (mapElement, locations = [], accessToken = '') => {
+  if (!mapElement || !window.mapboxgl || !accessToken || !locations.length) return;
 
-  mapboxgl.accessToken = accessToken;
+  window.mapboxgl.accessToken = accessToken;
 
-  const map = new mapboxgl.Map({
-    container: 'map',
+  const map = new window.mapboxgl.Map({
+    container: mapElement,
     style: 'mapbox://styles/mapbox/streets-v12',
     scrollZoom: false,
   });
 
-  const bounds = new mapboxgl.LngLatBounds();
+  const bounds = new window.mapboxgl.LngLatBounds();
 
   locations.forEach((loc) => {
     const el = document.createElement('div');
@@ -22,7 +22,7 @@ export const displayMap = (locations = [], accessToken) => {
       .setLngLat(loc.coordinates)
       .addTo(map);
 
-    new mapboxgl.Popup({ offset: 30 })
+    new window.mapboxgl.Popup({ offset: 30 })
       .setLngLat(loc.coordinates)
       .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
       .addTo(map);
