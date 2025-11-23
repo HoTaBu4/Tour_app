@@ -1,65 +1,41 @@
-const mapElement = document.getElementById('map');
-const locations = mapElement ? JSON.parse(mapElement.dataset.locations || '[]') : [];
-const accessToken = mapElement ? mapElement.dataset.mapboxToken : '';
+export const displayMap = (locations = [], accessToken) => {
+  if ( !accessToken) return;
 
-if (mapElement && window.mapboxgl && accessToken && locations.length) {
-	window.mapboxgl.accessToken = accessToken;
+  mapboxgl.accessToken = accessToken;
 
-	const map = new window.mapboxgl.Map({
-		container: 'map',
-		style: 'mapbox://styles/mapbox/streets-v12',
-		scrollZoom: false,
-	});
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    scrollZoom: false,
+  });
 
-	const bounds = new window.mapboxgl.LngLatBounds();
+  const bounds = new mapboxgl.LngLatBounds();
 
-    locations.forEach((loc) => {
-        const el = document.createElement('div')
-        el.className ='marker'
+  locations.forEach((loc) => {
+    const el = document.createElement('div');
+    el.className = 'marker';
 
-        // add marker
-        new mapboxgl.Marker({
-            element:el,
-            anchor: 'bottom'
-        })
-        .setLngLat(loc.coordinates)
-        .addTo(map)
-
-        new window.mapboxgl.Popup({ offset: 30 })
-			.setLngLat(loc.coordinates)
-			.setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
-			.addTo(map);
-
-        bounds.extend(loc.coordinates);
+    new window.mapboxgl.Marker({
+      element: el,
+      anchor: 'bottom'
     })
-    
-    // extend the map bound to include the currect location
+      .setLngLat(loc.coordinates)
+      .addTo(map);
 
-    map.fitBounds(bounds, {
-        padding: {
-                top: 200,
-                bottom: 200,
-                left: 100,
-                right: 100
-            }
-    })
+    new mapboxgl.Popup({ offset: 30 })
+      .setLngLat(loc.coordinates)
+      .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
+      .addTo(map);
 
+    bounds.extend(loc.coordinates);
+  });
 
-	// locations.forEach((loc) => {
-	// 	new window.mapboxgl.Marker({ color: '#55c57a' })
-	// 		.setLngLat(loc.coordinates)
-	// 		.addTo(map);
-
-	// 	new window.mapboxgl.Popup({ offset: 30 })
-	// 		.setLngLat(loc.coordinates)
-	// 		.setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
-	// 		.addTo(map);
-
-	// 	bounds.extend(loc.coordinates);
-	// });
-
-	// map.fitBounds(bounds, {
-	// 	padding: { top: 200, bottom: 150, left: 100, right: 100 },
-	// });
-}
-
+  map.fitBounds(bounds, {
+    padding: {
+      top: 200,
+      bottom: 200,
+      left: 100,
+      right: 100
+    }
+  });
+};
