@@ -126,6 +126,8 @@ export const protect = CatchAsync(async (req, res, next) => {
 
     // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
+    // Expose user to templates for protected routes as well
+    res.locals.user = currentUser;
     next();
 });
 
