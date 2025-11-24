@@ -33,8 +33,8 @@ export const logout = async() => {
     })
 
     if (res.data.status == 'success') {
-      //add true to force reload from server not from cache
-      location.reload(true)
+      // redirect to home instead of reloading a protected page
+      location.assign('/')
     }
   } catch (error) {
     console.log(error)
