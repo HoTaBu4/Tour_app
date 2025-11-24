@@ -3,7 +3,7 @@ import { displayMap } from './mapbox.js';
 
 const logoutButton = document.querySelector('.nav__el--logout');
 const mapElement = document.getElementById('map');
-const loginForm = document.querySelector('.form');
+const loginForm = document.querySelector('.form--login');
 
 // Map rendering
 if (mapElement) {
