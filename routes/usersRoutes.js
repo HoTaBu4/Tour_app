@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, createUser, getUser, deleteUser, updateMe, deleteMe, getMe } from '../controllers/userController.js';
+import { getAllUsers, createUser, getUser, deleteUser, updateMe, deleteMe, getMe, uploadUserPhoto } from '../controllers/userController.js';
 import * as authController from '../controllers/authController.js';
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router.route("/updateMyPassword")
   .patch(authController.updatePassword);
 
 router.route("/updateMe")
-  .patch(updateMe);
+  .patch( uploadUserPhoto, updateMe);
 router.route("/deleteMe")
   .delete(deleteMe);
 
