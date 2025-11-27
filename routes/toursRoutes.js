@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats, getMonthlyPlan, getToursWithin, getDistances} from '../controllers/tourController.js';
+import { getAllTours, createTour, getTour, deleteTour, updateTour ,getTourStats, getMonthlyPlan, getToursWithin, getDistances, uploadTourImages, resizeTourImages} from '../controllers/tourController.js';
 import * as authController from '../controllers/authController.js';
 import reviewsRouter from '../routes/reviewsRoutes.js'
 const router = express.Router()
@@ -40,6 +40,8 @@ router.route("/:id")
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
     updateTour
   );
 
