@@ -3,9 +3,8 @@ import AppError from "../utils/AppError.js";
 import CatchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
-import sendEmail from "../utils/emails.js";
+import sendEmail, { Email } from "../utils/emails.js";
 import crypto from "crypto";
-import { create } from "domain";
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -37,14 +36,18 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 export const signup = CatchAsync(async (req, res) => {
-    const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm
-    });
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm
+  });
 
-    createSendToken(newUser, 201, res);
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  console.log('url', url);
+  await new Email(newUser, url).sendWelcome();
+
+  createSendToken(newUser, 201, res);
 });
 
 export const login = CatchAsync(async (req, res, next) => {
