@@ -9,5 +9,5 @@ router.get('/',bookingController.createBookingCheckout, authController.isLoggedI
 router.get('/tour/:slug',authController.isLoggedIn, viewController.getTour)
 router.get('/login',authController.isLoggedIn, viewController.getloginForm)
 router.get('/me', authController.protect , viewController.getAccount)
-
+router.get('/my-tours', authController.protect ,viewController.getMyTours);
 export default router;

@@ -1,6 +1,7 @@
 import Tour from '../models/tourModel.js'
 import CatchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/AppError.js'
+import Booking from '../models/bookingModel.js'
 
 const getOverview = CatchAsync(async (req, res,) => {
   //get tours
@@ -29,6 +30,19 @@ const getTour = CatchAsync(async (req, res, next) => {
   });
 })
 
+const getMyTours = CatchAsync(async (req, res, next) => {
+  const bookings = await Booking.find({ user: req.user.id });
+
+  const tourIDs = bookings.map(el => el.tour);
+
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours
+  });
+});
+
 const getloginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'log into your account'
@@ -40,4 +54,4 @@ const getAccount = (req, res) => {
     title: 'Your account'
   })
 }
-export default { getOverview, getTour , getloginForm, getAccount };
+export default { getOverview, getTour , getloginForm, getAccount ,getMyTours};
