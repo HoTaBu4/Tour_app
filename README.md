@@ -42,11 +42,3 @@ comment all the validation before importing
 - **Nodemon** – Development utility for auto-reloading
 
 ---
-
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/tour-app.git
-cd tour-app
