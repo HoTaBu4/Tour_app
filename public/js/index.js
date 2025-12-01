@@ -1,12 +1,24 @@
 import { login, logout } from './login.js';
 import { displayMap } from './mapbox.js';
 import { updateSettings} from './updateSettings.js';
+import { bookTour } from './stripe.js';
 
 const logoutButton = document.querySelector('.nav__el--logout');
 const mapElement = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookTourButton = document.getElementById('book-tour');
+
+if (bookTourButton) {
+  bookTourButton.addEventListener('click', e => {
+    e.preventDefault();
+
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
+}
 
 if (userDataForm) {
   userDataForm.addEventListener('submit', e => {
