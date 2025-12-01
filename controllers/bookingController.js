@@ -1,4 +1,5 @@
 import Tour from "../models/tourModel.js";
+import Booking from "../models/bookingModel.js";
 import CatchAsync from "../utils/catchAsync.js";
 import stripe from "stripe";
 import dotenv from 'dotenv';
@@ -40,4 +41,16 @@ const getCheckoutSession = CatchAsync(async (req, res, next) => {
   });
 });
 
-export default { getCheckoutSession };
+const createBookingCheckout = CatchAsync(async (req, res, next) => {
+  const { tour, user, price } = req.query;
+
+  if (!tour && !user && !price) {
+    return next();
+  }
+
+  await Booking.create({ tour, user, price });
+
+  res.redirect(req.originalUrl.split('?')[0]);
+})
+
+export default { getCheckoutSession, createBookingCheckout };
