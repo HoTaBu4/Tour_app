@@ -15,6 +15,7 @@ import hpp from "hpp";
 import path from 'path';
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import compression from "compression";
 
 const app = express();
 
@@ -80,6 +81,8 @@ app.use(hpp(
     ]
   }
 ))
+
+app.use(compression())
 
 app.use('/api', limiter);
 
