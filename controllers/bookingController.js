@@ -3,6 +3,7 @@ import Booking from "../models/bookingModel.js";
 import CatchAsync from "../utils/catchAsync.js";
 import stripe from "stripe";
 import dotenv from 'dotenv';
+import factory from "./handleFactory.js";
 dotenv.config({ path: './config.env' });
 
 const stripeInstance = stripe(process.env.STRIPE_SECRET_KEY);
