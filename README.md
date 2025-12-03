@@ -42,3 +42,18 @@ comment all the validation before importing
 - **Nodemon** – Development utility for auto-reloading
 
 ---
+
+## Installation
+
+- Clone the repository.
+- Install dependencies with `npm install`.
+- Copy `.env.example` to `config.env` and fill in your credentials.
+- Start the development server with `npm run start`.
+
+---
+
+## Environment Configuration
+
+Use `.env.example` as a template for configuring environment variables. The defaults use Mailtrap for email testing and leave secrets blank so you can supply your own values.
+
+implement restriction 

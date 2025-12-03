@@ -53,4 +53,10 @@ const createBookingCheckout = CatchAsync(async (req, res, next) => {
   res.redirect(req.originalUrl.split('?')[0]);
 })
 
-export default { getCheckoutSession, createBookingCheckout };
+const createBooking = factory.createOne(Booking);
+const getBooking = factory.getOne(Booking);
+const getAllBookings = factory.getAll(Booking);
+const updateBooking = factory.updateOne(Booking);
+const deleteBooking = factory.deleteOne(Booking);
+
+export default { getCheckoutSession, createBookingCheckout, createBooking, getBooking, getAllBookings, updateBooking, deleteBooking };
