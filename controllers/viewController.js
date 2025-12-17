@@ -49,9 +49,16 @@ const getloginForm = (req, res) => {
   })
 }
 
+const getRegisterForm = (req, res) => {
+  res.status(200).render('register', {
+    title: 'register your account'
+  })
+}
+
 const getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account'
   })
 }
-export default { getOverview, getTour , getloginForm, getAccount ,getMyTours};
+
+export default { getOverview, getTour , getloginForm, getAccount ,getMyTours, getRegisterForm};
